@@ -11,19 +11,42 @@
     
     function StormFocusManager(el) {
 		this.node = el;
+		this.focusableChildren = this.getFocusableChildren();
+		this.addListeners();
     }
 	
 	StormFocusManager.prototype.getFocusableChildren = function(el) {
 		var focusableElements = ['a[href]', 'area[href]', 'input:not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'button:not([disabled])', 'iframe', 'object', 'embed', '[contenteditable]', '[tabindex]:not([tabindex="-1"])'];
 		
-		/*
-		return $$(focusableElements.join(','), node).filter(function (child) {
+		return [].slice.call(this.node.querySelectorAll(focusableElements.join(','))).filter(function (child) {
 		  return !!(child.offsetWidth || child.offsetHeight || child.getClientRects().length);
 		});
-		*/
 	};
 	
-	StormFocusManager.prototype.tab = function() {
+	StormFocusManager.prototype.addListeners = function() {
+		
+		document.addEventListener('keydown', function (e) {
+			if(e.keyCode === 9) {
+				this.tab();
+			}
+		}.bind(this));
+		
+		document.body.addEventListener('focus', this.setFocusToFirst, true);
+	};
+	
+	StormFocusManager.prototype.removeListeners = function() {
+		document.removeEventListener('keydown', this.keyListener);
+		document.removeEventListener('focus', this.focusListener);
+	};
+	
+	StormFocusManager.prototype.keyListener = function() {
+		
+	};
+	
+	StormFocusManager.prototype.focusListener = function() {};
+	
+	StormFocusManager.prototype.tab = function(e) {
+		
 		
 		/*    var focusableChildren = getFocusableChildren(node);
     var focusedItemIndex = focusableChildren.indexOf(document.activeElement);
@@ -38,10 +61,6 @@
 		
 	};
 	
-	//get list of focusable children of a node
-	//remember last active node
-	//set focus on first node
-	//trap tab to focusable children
 	
 	function init(sel) {
         var el = [].slice.call(document.querySelector(sel));
