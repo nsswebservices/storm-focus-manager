@@ -12,7 +12,6 @@
     function StormFocusManager(el) {
 		this.node = el;
 		this.focusableChildren = this.getFocusableChildren();
-		this.addListeners();
     }
 	
 	StormFocusManager.prototype.getFocusableChildren = function(el) {
@@ -24,41 +23,42 @@
 	};
 	
 	StormFocusManager.prototype.addListeners = function() {
-		
-		document.addEventListener('keydown', function (e) {
-			if(e.keyCode === 9) {
-				this.tab();
-			}
-		}.bind(this));
-		
-		document.body.addEventListener('focus', this.setFocusToFirst, true);
+		document.addEventListener('keydown', this.keyListener.bind(this), true);
+		//document.body.addEventListener('focus', this.focusListener.bind(this), true);
 	};
 	
 	StormFocusManager.prototype.removeListeners = function() {
 		document.removeEventListener('keydown', this.keyListener);
-		document.removeEventListener('focus', this.focusListener);
+		//document.removeEventListener('focus', this.focusListener);
 	};
 	
-	StormFocusManager.prototype.keyListener = function() {
-		
+	StormFocusManager.prototype.keyListener = function(e) {
+		if(e.keyCode === 9) {
+			this.tab(e);
+		}
 	};
 	
-	StormFocusManager.prototype.focusListener = function() {};
+	//StormFocusManager.prototype.focusListener = function() {};
 	
 	StormFocusManager.prototype.tab = function(e) {
+		var focusedItemIndex = this.focusableChildren.indexOf(document.activeElement);
 		
+		if (e.shiftKey && focusedItemIndex === 0) {
+		  this.focusableChildren[this.focusableChildren.length - 1].focus();
+		  e.preventDefault();
+		} else if (!event.shiftKey && focusedItemIndex === this.focusableChildren.length - 1) {
+		  this.focusableChildren[0].focus();
+		  encodeURI.preventDefault();
+		}
+	};
+	
+	StormFocusManager.prototype.start = function(){
+		this.lastFocused = document.activeElement;
+	};
 		
-		/*    var focusableChildren = getFocusableChildren(node);
-    var focusedItemIndex = focusableChildren.indexOf(document.activeElement);
-
-    if (event.shiftKey && focusedItemIndex === 0) {
-      focusableChildren[focusableChildren.length - 1].focus();
-      event.preventDefault();
-    } else if (!event.shiftKey && focusedItemIndex === focusableChildren.length - 1) {
-      focusableChildren[0].focus();
-      event.preventDefault();
-    }*/
-		
+	StormFocusManager.prototype.focusFirst = function() {
+    	this.focusableChildren[0].focus();
+		//this.addListeners(); call this from app merging prototype??
 	};
 	
 	
