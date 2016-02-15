@@ -1,4 +1,9 @@
-(function(root, factory) {
+/**
+ * @name storm-focus-manager: Manage focus and tabbing for accessible JS components
+ * @version 0.1.0: Mon, 15 Feb 2016 19:53:29 GMT
+ * @author stormid
+ * @license MIT
+ */(function(root, factory) {
   if (typeof define === 'function' && define.amd) {
     define([], factory);
   } else if (typeof exports === 'object') {
