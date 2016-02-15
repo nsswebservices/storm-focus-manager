@@ -148,6 +148,16 @@
         els.forEach(function(el){
             instances.push(new StormTabs(el, opts));
         });
+		
+		
+		/*
+		REFACTOR TO USE OBJECT COMPOSITION RATHER THAN INHERITANCE
+		1. Change constructor fn into object
+		
+		2.Replace 'new' construcor call with object composition
+		Object.assign(Object.create(StormTabs), focusManager);
+		*/
+		
         return instances;
     }
     

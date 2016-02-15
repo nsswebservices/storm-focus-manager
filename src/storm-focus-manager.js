@@ -8,7 +8,7 @@
   }
 }(this, function() {
 	'use strict';
-    
+    /*
     function StormFocusManager(el) {
 		this.node = el;
 		this.focusableChildren = this.getFocusableChildren();
@@ -61,17 +61,29 @@
 		//this.addListeners(); call this from app merging prototype??
 	};
 	
-	
-	function init(el) {
-        if(!!!el) {
-            throw new Error('FocusManager cannot be initialised, no augmentable elements found');
-        }
-		
-		return new StormFocusManager(el);
-	}
+	return StormFocusManager;
+	*/
 	
 	return {
-		init: init
+		init: function(el){
+			this.node = el;
+			this.focusableChildren = this.getFocusableChildren();
+		},
+		getFocusableChildren: function() {
+			var focusableElements = ['a[href]', 'area[href]', 'input:not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'button:not([disabled])', 'iframe', 'object', 'embed', '[contenteditable]', '[tabindex]:not([tabindex="-1"])'];
+
+			return [].slice.call(this.node.querySelectorAll(focusableElements.join(','))).filter(function (child) {
+			  return !!(child.offsetWidth || child.offsetHeight || child.getClientRects().length);
+			});
+		},
+		addListeners: function() {
+			document.addEventListener('keydown', this.keyListener.bind(this), true);
+			//document.body.addEventListener('focus', this.focusListener.bind(this), true);
+		},
+		removeListeners = function() {
+			document.removeEventListener('keydown', this.keyListener);
+			//document.removeEventListener('focus', this.focusListener);
+		},
 	};
 	
  }));
